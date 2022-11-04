@@ -1,0 +1,134 @@
+<?xml version="1.0"?>
+
+
+<robot name="5 dof Manipulator">
+  
+  <link name="ground_frame">
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+  </link>
+  
+
+  <link name="link_1">
+    <visual>
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="red">
+         <color rgba="1.0 0.0 0.0 1.0"/>
+      </material>
+    </visual>
+  </link>
+  
+<!-- here I just connect the first link to the ground frame-->
+ <joint name="rev1" type="fixed">
+    <origin xyz="0.0 0.0 0.1" rpy="0.0 0.0 0.0"/>
+    <parent link="ground_frame"/>
+    <child link="link_1"/>
+  </joint>
+
+  <link name="link_2">
+    <visual>
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="light_blue">
+         <color rgba="0.0 0.25 1.0 1.0"/>
+      </material>
+    </visual>
+  </link>
+
+    <joint name="joint_1" type="prismatic">
+        <origin xyz="0.1 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <parent link="link_1"/>
+        <child link="link_2"/>
+        <axis xyz="1 0 0"/>
+        <limit effort="1.0" velocity="1.0" lower="0" upper="1.0" />
+    </joint>
+    
+   <link name="link_3">
+    <visual>
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="blue">
+         <color rgba="0.0 0.0 1.0 1.0"/>
+      </material>
+    </visual>
+  </link>
+  
+    <joint name="joint_2" type="prismatic">
+        <origin xyz="0.0 0.1 0.0" rpy="0.0 0.0 0.0"/>
+        <parent link="link_2"/>
+        <child link="link_3"/>
+        <axis xyz="0 1 0"/>
+        <limit effort="30" velocity="1.0" lower="0" upper="1.0" />
+    </joint>
+    
+    
+      <link name="link_4">
+    <visual>
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 1.57 0.0"/>
+      <geometry>
+        <cylinder radius="0.1" length= "0.2"/>
+      </geometry>
+      <material name="yellow">
+         <color rgba="1.0 1.0 0.0 1.0"/>
+      </material>
+    </visual>
+  </link>
+  
+    <joint name="joint_3" type="revolute">
+        <origin xyz="0.0 0.0 0.4" rpy="0.0 0.0 0.0"/>
+        <parent link="link_3"/>
+        <child link="link_4"/>
+        <axis xyz="1 0 0"/>
+        <limit effort="1.0" velocity="1.0" lower="-3.14" upper="3.14" />
+    </joint> 
+
+
+      <link name="link_5">
+    <visual>
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.1" length= "0.2"/>
+      </geometry>
+      <material name="vomit">
+         <color rgba="0.2 0.6 0.2 1.0"/>
+      </material>
+    </visual>
+  </link>
+  
+    <joint name="joint_4" type="revolute">
+        <origin xyz="0.4 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <parent link="link_4"/>
+        <child link="link_5"/>
+        <axis xyz="0 0 1"/>
+        <limit effort="1.0" velocity="1.0" lower="-3.14" upper="3.14" />
+    </joint> 
+    
+ 
+<link name="link_6">
+    <visual>
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 1.57 0.0"/>
+      <geometry>
+        <cylinder radius="0.1" length= "0.2"/>
+      </geometry>
+      <material name="cyan">
+         <color rgba="0.2 0.8 1.0 1.0"/>
+      </material>
+    </visual>
+</link>
+  
+<joint name="joint_5" type="revolute">
+    <origin xyz="0.4 0.0 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="link_5"/>
+    <child link="link_6"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="1.0" velocity="1.0" lower="-3.0" upper="3.0" />
+</joint> 
+
+
+</robot>

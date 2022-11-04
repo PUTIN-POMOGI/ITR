@@ -1,0 +1,169 @@
+<?xml version="1.1" encoding="utf-8"?>
+<!-- This URDF was made by Anton Kirilin with the help of ros wiki, Albert's guthub -->
+
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="grip">
+
+<!-- Creating Gloabl variables for the links -->
+
+<xacro:property name="the_radius" value="0.1" />
+<xacro:property name="the_length" value="0.2" />
+<xacro:property name="the_box_size" value="0.1 0.1 0.1" />
+
+
+
+<!--           Function for creating a box link             -->
+
+<xacro:macro name="create_box_link" params="prefix rgba color">
+ <link name="${prefix}_link">
+   <visual>
+     <origin xyz="0 0 0" rpy="0 0 0" />
+     <geometry>
+       <box size="${the_box_size}" />
+     </geometry>
+     <material name="${color}">
+       <color rgba="${rgba}"/>
+     </material>
+   </visual>
+ </link>	
+</xacro:macro>
+
+
+
+<!--         Function for creating a cylindric link         -->
+
+<xacro:macro name="create_cyl_link" params="prefix rpy rgba color">
+ <link name="${prefix}_link">
+   <visual>
+     <origin xyz="0 0 0" rpy="${rpy}" />
+     <geometry>
+       <cylinder radius="${the_radius}" length="${the_length}"/>
+     </geometry>
+     <material name="${color}">
+       <color rgba="${rgba}"/>
+     </material>
+   </visual>
+ </link>	
+</xacro:macro>
+
+
+<!--              Function for creating a prismatic joint             -->
+
+<xacro:macro name="create_prism_joint" params="prefix xyz parent child axis">
+    <joint name="joint_${prefix}" type="prismatic">
+        <origin xyz="${xyz}" rpy="0.0 0.0 0.0"/>
+        <parent link="${parent}_link"/>
+        <child link="${child}_link"/>
+        <axis xyz="${axis}"/>
+        <limit effort="1.0" velocity="1.0" lower="0" upper="1.0" />
+    </joint>	
+</xacro:macro>
+
+
+<!--              Function for creating a revolute joint             -->
+
+<xacro:macro name="create_rev_joint" params="prefix xyz parent child axis">
+    <joint name="joint_${prefix}" type="revolute">
+        <origin xyz="${xyz}" rpy="0.0 0.0 0.0"/>
+        <parent link="${parent}_link"/>
+        <child link="${child}_link"/>
+        <axis xyz="${axis}"/>
+        <limit effort="1.0" velocity="1.0" lower="-3.14" upper="3.14" />
+    </joint>	
+</xacro:macro>
+
+
+
+<!-- Declaration of the links and joints using the predefined macroses above -->
+
+
+ <link name="ground_frame">
+ 	<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+ </link>
+ 
+<xacro:create_box_link
+prefix="1"
+rgba="1.0 0.0 0.0 1.0"
+color="Red"
+/>
+
+<!-- here I just connect the first link to the ground frame-->
+ <joint name="rev1" type="fixed">
+    <origin xyz="0.0 0.0 0.1" rpy="0.0 0.0 0.0"/>
+    <parent link="ground_frame"/>
+    <child link="1_link"/>
+</joint>
+    
+<xacro:create_box_link
+prefix="2"
+rgba="0.0 0.25 1.0 1.0"
+color="light_blue"
+/>
+
+<xacro:create_prism_joint
+prefix="1"
+xyz="0.1 0.0 0.0"
+child="2"
+parent="1"
+axis="1 0 0"
+/>   
+
+<xacro:create_box_link
+prefix="3"
+rgba="0.0 0.0 1.0 1.0"
+color="blue"
+/>
+
+<xacro:create_prism_joint
+prefix="2"
+xyz="0.0 0.1 0.0"
+parent="2"
+child="3"
+axis="0 1 0"
+/> 
+
+<xacro:create_cyl_link
+prefix="4"
+rpy="0.0 1.57 0.0"
+rgba="1.0 1.0 0.0 1.0"
+color="yellow"
+/>
+
+<xacro:create_rev_joint
+prefix="3"
+xyz="0.0 0.0 0.4"
+parent="3"
+child="4"
+axis="1 0 0"
+/>
+
+<xacro:create_cyl_link
+prefix="5"
+rpy="0.0 0.0 0.0"
+rgba="0.2 0.6 0.2 1.0"
+color="vomit"
+/>
+
+<xacro:create_rev_joint
+prefix="4"
+xyz="0.4 0.0 0.0"
+parent="4"
+child="5"
+axis="0 0 1"
+/>
+
+<xacro:create_cyl_link
+prefix="6"
+rpy="0.0 1.57 0.0"
+rgba="0.2 0.8 1.0 1.0"
+color="cyan"
+/>
+
+<xacro:create_rev_joint
+prefix="6"
+xyz="0.4 0.0 0.0"
+parent="5"
+child="6"
+axis="1 0 0"
+/>
+    
+</robot>
